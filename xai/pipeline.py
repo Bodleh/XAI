@@ -1,6 +1,7 @@
 import numpy as np
 from xai.explainers import explain_with_lime, explain_with_shap, compute_global_pfi
 
+
 def predict_and_explain(
     X_train, X_test, y_test,
     model, lime_explainer, shap_explainer,
@@ -29,7 +30,9 @@ def predict_and_explain(
 
     # SHAP (local)
     print("XAI #2: SHAP (Local Explanation)")
-    shap_idx, shap_contrib = explain_with_shap(shap_explainer, model, X_train, x_input, pred_idx=pred_idx, top_k=show_top_k)
+    shap_idx, shap_contrib = explain_with_shap(
+        shap_explainer, model, X_train, x_input, pred_idx=pred_idx, top_k=show_top_k
+    )
     print(f"SHAP dihitung untuk kelas index: {shap_idx} ({class_names[shap_idx]})")
     for feat, val in shap_contrib:
         direction = "naikkan skor kelas" if val > 0 else "turunkan skor kelas"
@@ -41,7 +44,7 @@ def predict_and_explain(
     pfi_top = compute_global_pfi(model, X_test, y_test, top_k=show_top_k)
     print("Fitur paling berpengaruh secara global (semakin besar semakin penting):")
     for feat, imp_mean, imp_std in pfi_top:
-        print(f"- {feat:20s} | importance={imp_mean:.5f} ± {imp_std:.5f}")
+        print(f"- {feat:20s} | importance={imp_mean:.5f} +/- {imp_std:.5f}")
     print()
 
     return pred_label, proba
